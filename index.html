@@ -61,7 +61,8 @@
                 const idx = {
                     title: header.indexOf('title'),
                     url: header.indexOf('url'),
-                    time_added: header.indexOf('time_added')
+                    time_added: header.indexOf('time_added'),
+                    tags: header.indexOf('tags')
                 };
 
                 if (idx.title === -1 || idx.url === -1 || idx.time_added === -1) {
@@ -78,7 +79,12 @@
                     const title = (cols[idx.title] || cols[idx.url]).replace(/"/g, '&quot;');
                     const url = cols[idx.url];
                     const time = parseInt(cols[idx.time_added]) || Math.floor(Date.now() / 1000);
-                    html += `    <DT><A HREF="${url}" ADD_DATE="${time}" LAST_MODIFIED="${time}">${title}</A>\n`;
+                    if ( cols[idx.tags] ) {
+                        const tags = (cols[idx.tags] || '').replace(/\|/g, ',');
+                        html += `    <DT><A HREF="${url}" ADD_DATE="${time}" LAST_MODIFIED="${time}" TAGS="${tags}">${title}</A>\n`;
+		    } else {
+                        html += `    <DT><A HREF="${url}" ADD_DATE="${time}" LAST_MODIFIED="${time}">${title}</A>\n`;
+		    }
                 }
 
                 html += '</DL><p>';
